@@ -1,8 +1,11 @@
 import express, { NextFunction, Request, Response } from "express";
 import createHttpError, { HttpError } from "http-errors";
 import logger from "./config/logger";
+import customerRouter from "./customer/customerRouter";
 
 const app = express();
+
+app.use("/customer", customerRouter);
 
 app.get("/", (req: Request, res: Response, next: NextFunction) => {
   const err = createHttpError(401, "You can't access this route");
