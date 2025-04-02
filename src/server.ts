@@ -2,6 +2,8 @@ import { Config } from "./config/config";
 import app from "./app";
 import logger from "./config/logger";
 
+//todo:Database setup for order-service
+
 const startServer = () => {
   try {
     app.listen(Config.PORT, () => {

@@ -35,10 +35,7 @@ const customerSchema = new mongoose.Schema<Customer>(
       required: true,
       trim: true,
     },
-    tenantId: {
-      type: String,
-      required: true,
-    },
+
     addresses: {
       type: [addressSchema],
       required: false,

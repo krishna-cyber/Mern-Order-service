@@ -1,17 +1,21 @@
 import express, { NextFunction, Request, Response } from "express";
-import createHttpError, { HttpError } from "http-errors";
+import { HttpError } from "http-errors";
+import cookieParser from "cookie-parser";
+import cors from "cors";
+import morgan from "morgan";
 import logger from "./config/logger";
 import customerRouter from "./customer/customerRouter";
 
 const app = express();
 
-app.use("/customer", customerRouter);
+app.use(cors());
+app.use(express.static("public"));
+app.use(cookieParser());
+app.use(express.json());
 
-app.get("/", (req: Request, res: Response, next: NextFunction) => {
-  const err = createHttpError(401, "You can't access this route");
-  res.status(200).json({ message: "Hello World" });
-  next(err);
-});
+app.use(morgan("dev"));
+
+app.use("/customer", customerRouter);
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 app.use((err: HttpError, req: Request, res: Response, next: NextFunction) => {

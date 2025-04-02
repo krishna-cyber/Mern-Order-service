@@ -1,41 +1,44 @@
-import { Response } from "express";
+import { NextFunction, Response } from "express";
+import { AuthRequest } from "./customerTypes";
 import { Request } from "express-jwt";
 import Customer from "./customerModel";
-import { AuthRequest } from "./customerTypes";
 
 class CustomerController {
-  getCustomer = async (req: Request, res: Response) => {
-    const {
-      sub: userId,
-      email,
-      firstName,
-      lastName,
-      tenantId,
-    } = (req.auth as AuthRequest) || {};
-    if (!userId) {
-      return res.status(400).json({ success: false, message: "Invalid token" });
-    }
-
-    //todo : implement service layer
-    const customer = await Customer.findOne({ userId });
-
-    if (!customer) {
-      const newCustomer = Customer.create({
-        userId,
+  getCustomer = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const {
+        sub: userId,
+        email,
         firstName,
         lastName,
-        email,
-        tenantId,
-        addresses: [],
+        addresses,
+      } = req.auth as AuthRequest;
+
+      console.log(req.auth);
+
+      //todo : implement services layer
+
+      const customer = await Customer.findOne({ userId });
+
+      if (!customer) {
+        const newCustomer = Customer.create({
+          firstName,
+          lastName,
+          addresses: addresses || [],
+          email,
+        });
+
+        //todo: logging after new customer create
+        res.json(newCustomer);
+        return;
+      }
+      res.json({
+        success: true,
       });
-
-      //todo: logging customer create
-      return res.json(newCustomer);
+    } catch (error) {
+      console.log(error);
+      next(error);
     }
-
-    res.json({
-      success: true,
-    });
   };
 }
 

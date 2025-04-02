@@ -11,7 +11,6 @@ export interface Customer {
   lastName: string;
   email: string;
   addresses: Address[];
-  tenantId: string;
   createdAt: Date;
   updatedAt: Date;
 }
