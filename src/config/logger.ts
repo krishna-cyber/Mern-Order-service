@@ -4,7 +4,7 @@ import { Config } from "./config";
 const logger = winston.createLogger({
   level: "info",
   format: winston.format.json(),
-  defaultMeta: { service: "auth-service" },
+  defaultMeta: { service: "order-service" },
   transports: [
     //logs upto level of info and stores in app.log file
     new winston.transports.File({
