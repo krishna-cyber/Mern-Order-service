@@ -40,6 +40,16 @@ class CustomerController {
       next(error);
     }
   };
+
+  addAddress = (req: Request, res: Response, next: NextFunction) => {
+    try {
+      res.json({
+        success: true,
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
 }
 
 export default CustomerController;

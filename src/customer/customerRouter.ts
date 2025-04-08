@@ -9,4 +9,8 @@ customerRouter.get("/", authenticate, (req, res, next) =>
   customerController.getCustomer(req, res, next)
 );
 
+customerRouter.patch("/addresses/:id", authenticate, (req, res, next) =>
+  customerController.addAddress(req, res, next)
+);
+
 export default customerRouter;

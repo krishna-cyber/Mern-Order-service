@@ -1,8 +1,28 @@
 import { Config } from "./config/config";
 import app from "./app";
 import logger from "./config/logger";
+import mongoose from "mongoose";
 
-//todo:Database setup for order-service
+const uri = process.env.MONGO_URI || "";
+
+const clientOptions = {
+  serverApi: { version: "1" as const, strict: true, deprecationErrors: true },
+};
+
+async function run() {
+  try {
+    // Create a Mongoose client with a MongoClientOptions object to set the Stable API version
+    await mongoose.connect(uri, clientOptions);
+    await mongoose.connection.db!.admin().command({ ping: 1 });
+    console.log(
+      "Pinged your deployment. You successfully connected to MongoDB!"
+    );
+    startServer();
+  } finally {
+    // Ensures that the client will close when you finish/error
+    await mongoose.disconnect();
+  }
+}
 
 const startServer = () => {
   try {
@@ -20,4 +40,4 @@ const startServer = () => {
   }
 };
 
-startServer();
+run().catch(console.dir);
