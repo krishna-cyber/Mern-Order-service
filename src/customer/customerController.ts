@@ -41,10 +41,41 @@ class CustomerController {
     }
   };
 
-  addAddress = (req: Request, res: Response, next: NextFunction) => {
+  addAddress = async (req: Request, res: Response, next: NextFunction) => {
     try {
+      const { id } = req.params;
+
+      const userId = req.auth?.sub;
+
+      if (!userId) {
+        throw new Error("User ID is missing from the authentication payload.");
+      }
+
+      //todo: implement services layer
+      const customer = await Customer.findOneAndUpdate(
+        {
+          _id: id,
+          userId,
+        },
+        {
+          $push: {
+            addresses: {
+              // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
+              text: req.body.address,
+
+              //implement is default in future
+              isDefault: false,
+            },
+          },
+        },
+        { new: true }
+      );
+
+      //todo:logging
+
       res.json({
         success: true,
+        customer,
       });
     } catch (error) {
       next(error);
