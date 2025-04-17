@@ -3,26 +3,17 @@ import app from "./app";
 import logger from "./config/logger";
 import mongoose from "mongoose";
 
-const uri = process.env.MONGO_URI || "";
+const uri = process.env.MONGO_URI ?? "";
 
-const clientOptions = {
-  serverApi: { version: "1" as const, strict: true, deprecationErrors: true },
-};
-
-async function run() {
-  try {
-    // Create a Mongoose client with a MongoClientOptions object to set the Stable API version
-    await mongoose.connect(uri, clientOptions);
-    await mongoose.connection.db!.admin().command({ ping: 1 });
-    console.log(
-      "Pinged your deployment. You successfully connected to MongoDB!"
-    );
+mongoose
+  .connect(uri)
+  .then(() => {
+    logger.info(`Connected to database and server starts`);
     startServer();
-  } finally {
-    // Ensures that the client will close when you finish/error
-    await mongoose.disconnect();
-  }
-}
+  })
+  .catch(() => {
+    process.exit(1);
+  });
 
 const startServer = () => {
   try {
@@ -39,5 +30,3 @@ const startServer = () => {
     process.exit(1);
   }
 };
-
-run().catch(console.dir);

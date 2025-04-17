@@ -5,6 +5,7 @@ import cors from "cors";
 import morgan from "morgan";
 import logger from "./config/logger";
 import customerRouter from "./customer/customerRouter";
+import couponRouter from "./coupons/couponsRouter";
 
 const app = express();
 
@@ -16,6 +17,7 @@ app.use(express.json());
 app.use(morgan("dev"));
 
 app.use("/customer", customerRouter);
+app.use("/coupons", couponRouter);
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 app.use((err: HttpError, req: Request, res: Response, next: NextFunction) => {

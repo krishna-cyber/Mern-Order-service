@@ -14,5 +14,6 @@ export interface Customer {
   createdAt: Date;
   updatedAt: Date;
 }
-
-export interface AuthRequest extends JwtPayload, Customer {}
+export interface AuthRequest extends JwtPayload, Customer {
+  role: string;
+}
