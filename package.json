@@ -9,8 +9,8 @@
     "format:check": "prettier  . --check",
     "format:fix": "prettier  . --write",
     "lint:check": "eslint .",
-    "lint:fix": "eslint . --fix",
-    "prepare": "husky"
+    "lint:fix": "eslint . --fix"
+
   },
   "keywords": [],
   "author": "Krishna Tiwari <tiwarikrishna54321@gmail.com>",
