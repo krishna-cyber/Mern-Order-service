@@ -17,11 +17,6 @@ const addressSchema = new mongoose.Schema<Address>(
 
 const customerSchema = new mongoose.Schema<Customer>(
   {
-    userId: {
-      type: String,
-      required: true,
-      trim: true,
-    },
     firstName: {
       type: String,
       required: true,
@@ -32,7 +27,6 @@ const customerSchema = new mongoose.Schema<Customer>(
     },
     email: {
       type: String,
-      required: true,
       trim: true,
     },
 

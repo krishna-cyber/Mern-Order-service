@@ -14,17 +14,18 @@ class CustomerController {
         addresses,
       } = req.auth as AuthRequest;
 
-      console.log(req.auth);
+      console.log(userId, email, firstName, lastName, addresses);
 
       //todo : implement services layer
 
-      const customer = await Customer.findOne({ userId });
+      const customer = await Customer.findById(userId);
 
       if (!customer) {
-        const newCustomer = Customer.create({
+        const newCustomer = await Customer.create({
+          _id: userId,
           firstName,
           lastName,
-          addresses: addresses || [],
+          addresses: addresses ?? [],
           email,
         });
 
