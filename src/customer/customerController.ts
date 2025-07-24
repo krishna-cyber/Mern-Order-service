@@ -2,10 +2,14 @@ import { NextFunction, Response } from "express";
 import { AuthRequest } from "./customerTypes";
 import { Request } from "express-jwt";
 import Customer from "./customerModel";
+import createHttpError from "http-errors";
 
 class CustomerController {
   getCustomer = async (req: Request, res: Response, next: NextFunction) => {
     try {
+      if (!req.auth) {
+        throw createHttpError(401, "Unauthorized");
+      }
       const {
         sub: userId,
         email,
@@ -13,8 +17,6 @@ class CustomerController {
         lastName,
         addresses,
       } = req.auth as AuthRequest;
-
-      console.log(userId, email, firstName, lastName, addresses);
 
       //todo : implement services layer
 
@@ -33,9 +35,7 @@ class CustomerController {
         res.json(newCustomer);
         return;
       }
-      res.json({
-        success: true,
-      });
+      res.json(customer);
     } catch (error) {
       console.log(error);
       next(error);
@@ -44,8 +44,6 @@ class CustomerController {
 
   addAddress = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { id } = req.params;
-
       const userId = req.auth?.sub;
 
       if (!userId) {
@@ -53,11 +51,8 @@ class CustomerController {
       }
 
       //todo: implement services layer
-      const customer = await Customer.findOneAndUpdate(
-        {
-          _id: id,
-          userId,
-        },
+      const customer = await Customer.findByIdAndUpdate(
+        userId,
         {
           $push: {
             addresses: {
